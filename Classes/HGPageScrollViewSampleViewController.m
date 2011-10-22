@@ -71,7 +71,7 @@
 	_myPageDataArray = [[NSMutableArray alloc] initWithCapacity : kNumPages];
 	
 	for (int i=0; i<kNumPages; i++) {
-		MyPageData *pageData = [[[MyPageData alloc] init] autorelease];
+		MyPageData *pageData = [[MyPageData alloc] init];
 		pageData.title = [NSString stringWithFormat:@"%d: Title text", i];
 		pageData.subtitle = [NSString stringWithFormat:@"%d: Subtitle text with some extra information", i];
 		pageData.image = [UIImage imageNamed:[NSString stringWithFormat:@"image%d", i]];
@@ -79,18 +79,18 @@
 	}
     
     // create a sample navigationController and insert it's rootViewController's view into the data array
-    MyTableViewController *myViewController = [[[MyTableViewController alloc] initWithNibName:@"MyTableViewController" bundle:nil] autorelease];
-    UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:myViewController] autorelease];
+    MyTableViewController *myViewController = [[MyTableViewController alloc] initWithNibName:@"MyTableViewController" bundle:nil];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:myViewController];
     [navController setToolbarHidden:NO];
-    MyPageData *pageData = [[[MyPageData alloc] init] autorelease];
+    MyPageData *pageData = [[MyPageData alloc] init];
     pageData.navController = navController;
     [_myPageDataArray insertObject:pageData atIndex:0];
 	
-	UIBarButtonItem *deckButton = [[[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%d", [_myPageDataArray count]] style:UIBarButtonItemStyleBordered target:self action:@selector(didClickBrowsePages:)] autorelease];
+	UIBarButtonItem *deckButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%d", [_myPageDataArray count]] style:UIBarButtonItemStyleBordered target:self action:@selector(didClickBrowsePages:)];
 
-	UIBarButtonItem *addButton = [[[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickAddPage:)] autorelease];
+	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickAddPage:)];
 
-    UIBarButtonItem *removeButton = [[[UIBarButtonItem alloc] initWithTitle:@"-" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickRemovePage:)] autorelease];
+    UIBarButtonItem *removeButton = [[UIBarButtonItem alloc] initWithTitle:@"-" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickRemovePage:)];
 
 	[toolbar setItems:[NSArray arrayWithObjects:deckButton, addButton, removeButton, nil] animated:NO];
 	
@@ -125,10 +125,6 @@
 }
 
 
-- (void)dealloc {
-	[_myPageDataArray release];
-    [super dealloc];
-}
 
 
 #pragma mark -
@@ -145,7 +141,7 @@
 {
     MyPageData *pageData = [_myPageDataArray objectAtIndex:index];
     if (pageData.navController) {
-        UIView *navBarCopy = [[[UINavigationBar alloc] initWithFrame:pageData.navController.navigationBar.frame] autorelease];
+        UIView *navBarCopy = [[UINavigationBar alloc] initWithFrame:pageData.navController.navigationBar.frame];
         return navBarCopy;
     }
         
@@ -275,7 +271,7 @@
     }
     else{
         // add "edit" button to the toolbar
-        UIBarButtonItem *editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didClickEditPage:)] autorelease];
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didClickEditPage:)];
         NSMutableArray *items = [NSMutableArray arrayWithArray:toolbar.items];
         [items addObject:editButton];
         toolbar.items = items;
@@ -310,12 +306,10 @@
     // Complete an add/remove pages request if one is pending
     if (indexesToDelete) {
         [self removePagesAtIndexSet:indexesToDelete];
-        [indexesToDelete release];
         indexesToDelete = nil;
     }
     if (indexesToInsert) {
         [self addPagesAtIndexSet:indexesToInsert];
-        [indexesToInsert release];
         indexesToInsert = nil;
     }
 }
@@ -353,7 +347,6 @@
     HGPageScrollView *pageScrollView = [[self.view subviews] lastObject];
     
     // create an index set of the pages we wish to add
-    [indexesToInsert release];
 
     // example 1: inserting one page at the current index  
     NSInteger selectedPageIndex = [pageScrollView indexForSelectedPage];
@@ -374,7 +367,6 @@
     }
     else{
         [self addPagesAtIndexSet:indexesToInsert];
-        [indexesToInsert release];
         indexesToInsert = nil;
     }
 
@@ -386,7 +378,7 @@
 {
     // create new pages and add them to the data set 
     [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        MyPageData *pageData = [[[MyPageData alloc] init] autorelease];
+        MyPageData *pageData = [[MyPageData alloc] init];
         pageData.title = [NSString stringWithFormat:@"New Page %d", idx];
         pageData.subtitle = [NSString stringWithFormat:@"Subtitle of my new page: %d", idx];
         pageData.image = [UIImage imageNamed:[NSString stringWithFormat:@"image%d", idx%9]]; //there are only 9 images in this sample project...
@@ -403,7 +395,7 @@
     
     if ([toolbar.items count] == 2) {
         //Add the "delete page" button.
-        UIBarButtonItem *removeButton = [[[UIBarButtonItem alloc] initWithTitle:@"-" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickRemovePage:)] autorelease];
+        UIBarButtonItem *removeButton = [[UIBarButtonItem alloc] initWithTitle:@"-" style:UIBarButtonItemStyleBordered target:self action:@selector(didClickRemovePage:)];
 
         NSArray *items = [NSArray arrayWithObjects:[toolbar.items objectAtIndex:0], [toolbar.items objectAtIndex:1], removeButton, nil];
         [toolbar setItems:items];
@@ -417,7 +409,6 @@
     HGPageScrollView *pageScrollView = [[self.view subviews] lastObject];
     
     // create an index set of the pages we wish to delete
-    [indexesToDelete release];
     
     // example 1: deleting the page at the current index
     indexesToDelete = [[NSMutableIndexSet alloc] initWithIndex:[pageScrollView indexForSelectedPage]];
@@ -436,7 +427,6 @@
     }
     else{
         [self removePagesAtIndexSet:indexesToDelete];
-        [indexesToDelete release];
         indexesToDelete = nil;
     }
     
@@ -499,7 +489,6 @@
     textField.hidden = YES;
     textField.delegate = nil;
     
-    [indexesToReload release];
     indexesToReload = [[NSMutableIndexSet alloc] initWithIndex:selectedIndex];
     
     if (pageScrollView.viewMode == HGPageScrollViewModePage) {

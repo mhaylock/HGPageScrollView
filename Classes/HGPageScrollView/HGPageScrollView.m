@@ -36,7 +36,7 @@
 
 @interface HGTouchView : UIView {
 }
-@property (nonatomic, retain) UIView *receiver;
+@property (nonatomic, strong) UIView *receiver;
 @end
 
 
@@ -45,10 +45,6 @@
 
 @synthesize receiver;
 
-- (void)dealloc {
-	self.receiver = nil;
-    [super dealloc];
-}
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
 	if ([self pointInside:point withEvent:event]) {
@@ -99,9 +95,9 @@ typedef enum{
 // responding to actions 
 - (void) didChangePageValue : (id) sender;
 
-@property (nonatomic, retain) NSIndexSet *indexesBeforeVisibleRange; 
-@property (nonatomic, retain) NSIndexSet *indexesWithinVisibleRange; 
-@property (nonatomic, retain) NSIndexSet *indexesAfterVisibleRange; 
+@property (nonatomic, strong) NSIndexSet *indexesBeforeVisibleRange; 
+@property (nonatomic, strong) NSIndexSet *indexesWithinVisibleRange; 
+@property (nonatomic, strong) NSIndexSet *indexesAfterVisibleRange; 
 
 @end
 
@@ -142,8 +138,6 @@ typedef enum{
 	[super awakeFromNib];
     
     // release IB reference (we do not want to keep a circular reference to our delegate & dataSource, or it will prevent them from properly deallocating). 
-    [_delegate release];
-    [_dataSource release];
 	
 	// init internal data structures
 	_visiblePages = [[NSMutableArray alloc] initWithCapacity:3];
@@ -162,7 +156,6 @@ typedef enum{
 	UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureFrom:)];
 	[_scrollView addGestureRecognizer:recognizer];
 	recognizer.delegate = self;
-	[recognizer release];
 	
 	// setup scrollView
 	_scrollView.decelerationRate = 1.0;//UIScrollViewDecelerationRateNormal;
@@ -194,13 +187,9 @@ typedef enum{
 
 - (void)dealloc 
 {
-	[_visiblePages release];
 	_visiblePages = nil;
-    [_deletedPages release];
     _deletedPages = nil;
-	[_reusablePages release];
 	_reusablePages = nil;
-    [super dealloc];
 }
 
 
@@ -379,12 +368,11 @@ typedef enum{
 		if ([self.dataSource respondsToSelector:@selector(pageScrollView:headerViewForPageAtIndex:)]) {
             UIView *altHeaderView = [self.dataSource pageScrollView:self headerViewForPageAtIndex:selectedIndex];
             [_userHeaderView removeFromSuperview];
-            [_userHeaderView release];
             _userHeaderView = nil;
            if (altHeaderView) {
                //use the header view initialized by the dataSource 
                _pageHeaderView.hidden = YES; 
-               _userHeaderView = [altHeaderView retain];
+               _userHeaderView = altHeaderView;
                CGRect frame = _userHeaderView.frame;
                frame.origin.y = 0;
                _userHeaderView.frame = frame; 
@@ -579,7 +567,7 @@ typedef enum{
 	if (visiblePage.reuseIdentifier) {
 		NSMutableArray *reusables = [_reusablePages objectForKey:visiblePage.reuseIdentifier];
 		if (!reusables) {
-			reusables = [[[NSMutableArray alloc] initWithCapacity : 4] autorelease];
+			reusables = [[NSMutableArray alloc] initWithCapacity : 4];
 		}
 		if (![reusables containsObject:visiblePage]) {
 			[reusables addObject:visiblePage];
@@ -879,7 +867,7 @@ typedef enum{
         // in order to shift pages backwards and trim the content size, the WIDTH of each deleted page needs to be known. 
         // We don't have an instance of the deleted pages and we cannot ask the data source to provide them because they've already been deleted. As a temp solution we take the default page width of 320. 
         // This assumption may be wrong if the data source uses anotehr page width or alternatively varying page widths.   
-        UIView *pseudoPage = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 460)] autorelease];
+        UIView *pseudoPage = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 460)];
         [self setFrameForPage:pseudoPage atIndex:idx];
         [_deletedPages addObject:pseudoPage];
         _visibleIndexes.location--;

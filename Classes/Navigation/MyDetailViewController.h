@@ -18,8 +18,8 @@
     IBOutlet UIImageView *_imageView;  
 }
 
-@property (nonatomic, retain) NSString *subtitle; 
-@property (nonatomic, retain) UIImage  *image; 
+@property (nonatomic, strong) NSString *subtitle; 
+@property (nonatomic, strong) UIImage  *image; 
 
 
 @end

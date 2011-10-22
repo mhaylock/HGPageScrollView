@@ -26,12 +26,9 @@
 
 - (void)dealloc
 {
-    self.subtitle = nil;
-    self.image = nil; 
-    [_titleLabel release];_titleLabel = nil;
-    [_imageView release]; _imageView = nil;
-    [_textView release]; _textView = nil;
-    [super dealloc];
+    _titleLabel = nil;
+     _imageView = nil;
+     _textView = nil;
 }
 
 - (void)didReceiveMemoryWarning

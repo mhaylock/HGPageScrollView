@@ -100,8 +100,8 @@ typedef enum{
 	
 	HGPageScrollViewMode _viewMode;
 
-	IBOutlet id <HGPageScrollViewDelegate>  _delegate;
-	IBOutlet id <HGPageScrollViewDataSource>  _dataSource;
+	IBOutlet id <HGPageScrollViewDelegate>  __unsafe_unretained _delegate;
+	IBOutlet id <HGPageScrollViewDataSource>  __unsafe_unretained _dataSource;
 
 	IBOutlet UIView			*_pageHeaderView;
     UIView                  *_userHeaderView; 
@@ -129,8 +129,8 @@ typedef enum{
 }
 
 
-@property(nonatomic,assign)   id <HGPageScrollViewDataSource> dataSource;
-@property(nonatomic,assign)   id <HGPageScrollViewDelegate>   delegate;
+@property(nonatomic,unsafe_unretained)   id <HGPageScrollViewDataSource> dataSource;
+@property(nonatomic,unsafe_unretained)   id <HGPageScrollViewDelegate>   delegate;
 
 // Info 
 
@@ -151,8 +151,8 @@ typedef enum{
 
 // Appearance
 
-@property(nonatomic,readwrite, retain) UIView *pageHeaderView;				// Shown above page view in HGPageScrollViewModePage (when a single page is selected). Hidden in HGPageScrollViewModeDeck. Default is an empty view (white/opaque background) with title/subtitle labels.
-@property(nonatomic,readwrite, retain) UIView *pageDeckBackgroundView;     // Background of the page deck (HGPageScrollViewModeDeck). Hidden in HGPageScrollViewModePage. Default takes a greyscale gradient.
+@property(nonatomic,readwrite, strong) UIView *pageHeaderView;				// Shown above page view in HGPageScrollViewModePage (when a single page is selected). Hidden in HGPageScrollViewModeDeck. Default is an empty view (white/opaque background) with title/subtitle labels.
+@property(nonatomic,readwrite, strong) UIView *pageDeckBackgroundView;     // Background of the page deck (HGPageScrollViewModeDeck). Hidden in HGPageScrollViewModePage. Default takes a greyscale gradient.
 
 @property (nonatomic, readonly)	HGPageScrollViewMode viewMode;
 

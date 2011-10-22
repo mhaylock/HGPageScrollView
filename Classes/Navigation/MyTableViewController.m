@@ -12,12 +12,6 @@
 @implementation MyTableViewController
 
 
-- (void)dealloc
-{
-    [_days release];
-    [_daysSubtitles release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -105,7 +99,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
@@ -169,7 +163,6 @@
     [detailViewController setToolbarItems:self.toolbarItems];
     
     [self.navigationController pushViewController:detailViewController animated:YES];
-    [detailViewController release];
 }
 
 
